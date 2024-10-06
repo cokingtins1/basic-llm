@@ -1,10 +1,11 @@
+import { Button } from '@/components/ui/button';
 import execute from "./actions/pdfLoader";
 
 export default async function Home() {
     return (
-        <div className='flex items-center'>
+        <div className='h-full'>
             <form action={execute}>
-                <button type="submit">Click</button>
+                <Button>Submit</Button>
             </form>
         </div>
     );

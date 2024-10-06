@@ -24,9 +24,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
-                {children}
+        <html className='h-full' lang="en">
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full`}>
+                <main className="mx-auto max-w-[1440px] pt-[20px] pb-[50px] h-full">
+                    {children}
+                </main>
             </body>
         </html>
     );
