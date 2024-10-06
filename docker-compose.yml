@@ -1,0 +1,14 @@
+services:
+    db:
+        image: ankane/pgvector
+        ports:
+            - 5432:5432
+        volumes:
+            - db:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=drpeppa1212
+            - POSTGRES_USER=flexdrpeppa1212
+            - POSTGRES_DB=basic-llm
+
+volumes:
+    db:
