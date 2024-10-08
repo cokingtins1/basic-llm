@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 export default function page() {
     const [message, setMessage] = useState("");
+    const [nodeMessage, setnodeMessage] = useState("");
 
     useEffect(() => {
         fetch("/api/hello")
@@ -11,5 +12,16 @@ export default function page() {
             .then((data) => setMessage(data));
     }, []);
 
-    return <div className='text-red'>{message}</div>;
+    useEffect(() => {
+        fetch("/api/nextapi")
+            .then((res) => res.json())
+            .then((data) => setnodeMessage(data.message));
+    }, []);
+
+    return (
+        <div className="text-white">
+            <p>{message}</p>
+            <p>{nodeMessage}</p>
+        </div>
+    );
 }
