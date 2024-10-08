@@ -10,9 +10,15 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 
 export default async function execute() {
     "use server";
+
+    const start = new Date().getTime();
+
     const content = "/home/cokingtins1/Documents/test gpt docs/2024_SSOE_Benefits_Guide.pdf";
     const loader = new PDFLoader(content);
     const docs = await loader.load();
+
+    const t1 = new Date().getTime();
+    console.log(`Load PDF: ${(t1 - start) / 1000} seconds`);
 
     const model = new Ollama({
         model: "llama3.1",
@@ -22,6 +28,9 @@ export default async function execute() {
 
     const extractedText = docs.map((doc) => doc.pageContent).join("\n");
 
+    const t2 = new Date().getTime();
+    console.log(`Extract text: ${(t2 - t1) / 1000} seconds`);
+
     const textSplitter = new CharacterTextSplitter({
         separator: "\n",
         chunkSize: 1000,
@@ -29,6 +38,9 @@ export default async function execute() {
     });
 
     const texts = await textSplitter.createDocuments([extractedText]);
+
+    const t3 = new Date().getTime();
+    console.log(`Split text: ${(t3 - t2) / 1000} seconds`);
 
     const embeddings = new HuggingFaceInferenceEmbeddings({
         apiKey: process.env.HUGGINGFACEHUB_API_KEY,
@@ -46,11 +58,17 @@ export default async function execute() {
         },
     });
 
+    const t4 = new Date().getTime();
+    console.log(`Create vectorStore: ${(t4 - t3) / 1000} seconds`);
+
     await vectorStore.addModels(
         await db.$transaction(
             texts.map((content) => db.document.create({ data: { content: content.pageContent } }))
         )
     );
+
+    const t5 = new Date().getTime();
+    console.log(`vectorStore.addModels: ${(t5 - t4) / 1000} seconds`);
 
     const vectorStoreRetriever = vectorStore.asRetriever();
 
@@ -74,7 +92,16 @@ If you don't know the answer, just say that you don't know, don't try to make up
         new StringOutputParser(),
     ]);
 
-    const answer = await chain.invoke("how much PTO do I have as an associate employee?");
+    // const answer = await chain.invoke("how much PTO do I have as an associate employee?");
+    // const answer = await chain.invoke("How much is 100 Wellness Works points worth?");
+    const t6 = new Date().getTime();
+    console.log(`Time before question is asked: ${(t6 - t5) / 1000} seconds`);
 
+    const answer = await chain.invoke(
+        "How much does SSOE match for 401(k) contributions?"
+    );
+
+    const t7 = new Date().getTime();
+    console.log(`Time to answer question: ${(t7 - t6) / 1000} seconds`);
     console.log(answer);
 }

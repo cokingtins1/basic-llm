@@ -5,7 +5,7 @@ export default async function Home() {
     return (
         <div className='h-full'>
             <form action={execute}>
-                <Button>Submit</Button>
+                <Button type='submit'>Submit</Button>
             </form>
         </div>
     );
