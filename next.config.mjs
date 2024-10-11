@@ -9,12 +9,12 @@ const nextConfig = {
 
     async rewrites() {
         return [
-          {
-            source: '/api/hello',
-            destination: 'http://127.0.0.1:8080/api/hello', // Proxy to Backend
-          },
-        ]
-      },
+            {
+                source: "/api/flask/:path*",
+                destination: "http://127.0.0.1:8080/api/flask/:path*", // Proxy to Backend
+            },
+        ];
+    },
 };
 
 export default nextConfig;
