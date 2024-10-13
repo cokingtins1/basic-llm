@@ -98,7 +98,7 @@ If you don't know the answer, just say that you don't know, don't try to make up
     console.log(`Time before question is asked: ${(t6 - t5) / 1000} seconds`);
 
     const answer = await chain.invoke(
-        "How much does SSOE match for 401(k) contributions?"
+        "What is the vesting period for my contributions to be 100% vested?"
     );
 
     const t7 = new Date().getTime();

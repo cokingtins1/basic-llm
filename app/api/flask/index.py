@@ -1,7 +1,7 @@
 from flask import Flask,request, jsonify
 from funcs.test_function import custom_greeting
+from funcs.another import generate_response
 from flask_cors import CORS
-import logging
 
 app = Flask(__name__)
 CORS(app)
@@ -18,9 +18,12 @@ def greet_user(name:str) -> str:
 @app.route('/api/flask/cap', methods=['POST'])
 def process():
     data = request.get_json()
-    app.logger.info(data)
-    print(data)
-    return jsonify({'result': data})
+    prompt:str = data['prompt']
+    print(f"data: {data['prompt']}")
+    response = generate_response(prompt)
+    print(f"data: {response}")
+    return jsonify({'result': response})
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

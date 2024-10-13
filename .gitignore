@@ -39,3 +39,6 @@ next-env.d.ts
 # Python
 /app/api/flask/venv
 /app/api/flask/__pychache__
+
+# Models
+/app/api/flask/capybarahermes-2.5-mistral-7b.Q4_K_M.gguf

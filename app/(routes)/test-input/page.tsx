@@ -17,6 +17,7 @@ import { useState } from "react";
 
 export default function Page() {
     const [chatResponse, setChatResponse] = useState("");
+    const [executionTime, setExecutionTime] = useState(0);
 
     const form = useForm<TPromptSchema>({
         resolver: zodResolver(promptSchema),
@@ -26,6 +27,7 @@ export default function Page() {
     });
 
     const onSubmit = async (text: TPromptSchema) => {
+        const t0 = new Date().getTime();
         const res = await fetch("/api/flask/cap", {
             method: "POST",
             body: JSON.stringify({
@@ -38,7 +40,9 @@ export default function Page() {
 
         if (res.ok) {
             const responseData = await res.json();
-            setChatResponse(responseData.result.prompt);
+            const t1 = new Date().getTime();
+            setExecutionTime((t1 - t0) / 1000);
+            setChatResponse(responseData.result);
         }
     };
 
@@ -64,7 +68,12 @@ export default function Page() {
                     ></FormField>
                 </form>
             </Form>
-            <p className="text-white">{chatResponse && chatResponse}</p>
+            {chatResponse && (
+                <>
+                    <p className="text-white">{chatResponse}</p>
+                    <p className='text-white'>Time to response: {executionTime} seconds</p>
+                </>
+            )}
         </div>
     );
 }
